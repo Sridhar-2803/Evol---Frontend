@@ -1,16 +1,32 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Home from "../../feartures/home/Home";
-import MovieDetails from "../../feartures/home/MovieDetails";
-import ServerError from "../errors/ServerError";
-import NotFound from "../errors/NotFound";
-import Theatre from "../../feartures/theatre/Theatre";
-import ShowTime from "../../feartures/showtime/ShowTime";
-import BookTicket from "../../feartures/bookticket/BookTicket";
-import LoginForm from "../../feartures/account/LoginForm";
 import App from "../layout/App";
-import RegisterForm from "../../feartures/account/RegisterForm";
-import InventryPage from "../../feartures/admin/InventryPage";
 import RequireAuth from "./RequireAuth";
+import { Box, CircularProgress } from "@mui/material";
+
+const Home = lazy(() => import("../../features/home/Home"));
+const MovieDetails = lazy(() => import("../../features/home/MovieDetails"));
+const Theatre = lazy(() => import("../../features/theatre/Theatre"));
+const ShowTime = lazy(() => import("../../features/showtime/ShowTime"));
+const BookTicket = lazy(() => import("../../features/bookticket/BookTicket"));
+const LoginForm = lazy(() => import("../../features/account/LoginForm"));
+const RegisterForm = lazy(() => import("../../features/account/RegisterForm"));
+const InventryPage = lazy(() => import("../../features/admin/InventryPage"));
+const ServerError = lazy(() => import("../errors/ServerError"));
+const MyBookings = lazy(() => import("../../features/bookticket/MyBookings"));
+const NotFound = lazy(() => import("../errors/NotFound"));
+
+function SuspenseLayout({ children }: { children: React.ReactNode }) {
+    return (
+        <Suspense fallback={
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
+                <CircularProgress sx={{ color: 'primary.light' }} />
+            </Box>
+        }>
+            {children}
+        </Suspense>
+    );
+}
 
 export const router = createBrowserRouter([
     {
@@ -18,20 +34,20 @@ export const router = createBrowserRouter([
         element: <App />,
         children: [
             {element: <RequireAuth />, children: [
-                {path: 'inventory', element: <InventryPage />}
+                {path: 'inventory', element: <SuspenseLayout><InventryPage /></SuspenseLayout>},
+                {path: '/home/:id/theatre', element: <SuspenseLayout><Theatre /></SuspenseLayout>},
+                {path: '/home/:id/theatre/:id/showtime', element: <SuspenseLayout><ShowTime /></SuspenseLayout>},
+                {path: '/home/:id/theatre/:id/showtime/:id/bookticket', element: <SuspenseLayout><BookTicket /></SuspenseLayout>},
+                {path: 'bookings', element: <SuspenseLayout><MyBookings /></SuspenseLayout>},
             ]},
-            
-            {path: '/home', element: <Home />},
-            {path: '/home/:id', element: <MovieDetails />},
-            {path: '/server-error', element: <ServerError />},
-            {path: '/not-found', element: <NotFound />},
+
+            {path: '/home', element: <SuspenseLayout><Home /></SuspenseLayout>},
+            {path: '/home/:id', element: <SuspenseLayout><MovieDetails /></SuspenseLayout>},
+            {path: '/server-error', element: <SuspenseLayout><ServerError /></SuspenseLayout>},
+            {path: '/not-found', element: <SuspenseLayout><NotFound /></SuspenseLayout>},
             {path: '*', element: <Navigate replace to = '/not-found' />},
-            {path: '/home/:id/theatre', element: <Theatre />},
-            {path: '/home/:id/theatre/:id/showtime', element: <ShowTime />},
-            {path: '/home/:id/theatre/:id/showtime/:id/bookticket', element: <BookTicket />},
-            {path: '', element: <LoginForm />},
-            {path: 'register', element: <RegisterForm />},
-            
+            {path: '', element: <SuspenseLayout><LoginForm /></SuspenseLayout>},
+            {path: 'register', element: <SuspenseLayout><RegisterForm /></SuspenseLayout>},
         ]
     }
 ])

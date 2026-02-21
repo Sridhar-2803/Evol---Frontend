@@ -2,6 +2,7 @@ import { fetchBaseQuery, type BaseQueryApi, type FetchArgs } from "@reduxjs/tool
 import {  startLoading, stopLoading } from "../layout/uiSlice";
 import { toast } from "react-toastify";
 import { router } from "../routes/Routes";
+import { apiRateLimiter } from "./rateLimiter";
 
 const customBaseQuery = fetchBaseQuery({
     baseUrl: 'https://localhost:5000/api',
@@ -10,13 +11,42 @@ const customBaseQuery = fetchBaseQuery({
 
 type ErrorResponse = | string | {title: string} | {errors: string[]};
 
-const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+const MAX_RETRIES = 3;
+const INITIAL_BACKOFF_MS = 1000;
 
 export const baseQueryWithErrorHandling = async (args: string | FetchArgs, api: BaseQueryApi,
     extraOptions: object) => {
+        // Client-side rate limiting
+        if (!apiRateLimiter.canProceed()) {
+            const retryAfter = apiRateLimiter.getRetryAfterMs();
+            toast.warning(`Too many requests. Please wait ${Math.ceil(retryAfter / 1000)}s.`);
+            return {
+                error: {
+                    status: 429,
+                    data: { title: 'Too many requests. Please slow down.' },
+                },
+            };
+        }
+
         api.dispatch(startLoading());
-        await sleep();
-        const result = await customBaseQuery(args, api, extraOptions);
+
+        // Retry with exponential backoff for server errors
+        let result = await customBaseQuery(args, api, extraOptions);
+        let retries = 0;
+
+        while (
+            result.error &&
+            typeof result.error.status === 'number' &&
+            result.error.status >= 500 &&
+            retries < MAX_RETRIES
+        ) {
+            retries++;
+            const backoff = INITIAL_BACKOFF_MS * Math.pow(2, retries - 1);
+            await sleep(backoff);
+            result = await customBaseQuery(args, api, extraOptions);
+        }
 
         api.dispatch(stopLoading())
         if(result.error) {

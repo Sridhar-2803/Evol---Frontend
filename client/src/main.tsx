@@ -10,14 +10,15 @@ import { Provider } from 'react-redux';
 import { store } from './app/store/store.ts';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import ErrorBoundary from './app/errors/ErrorBoundary.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={store}>
-      <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
-      <RouterProvider router={router} />
-    </Provider>
-    
+    <ErrorBoundary>
+      <Provider store={store}>
+        <ToastContainer position='bottom-right' hideProgressBar theme='colored' />
+        <RouterProvider router={router} />
+      </Provider>
+    </ErrorBoundary>
   </StrictMode>,
 )

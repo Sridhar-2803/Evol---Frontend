@@ -11,5 +11,7 @@ export type Movie = {
   cast: string
   status: string
   location: string
+  rating?: number
+  trailerUrl?: string
   showtime: ShowTime[]
 }

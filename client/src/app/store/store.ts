@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { homeApi } from "../../feartures/home/homeApi";
+import { homeApi } from "../../features/home/homeApi";
 import { useDispatch, useSelector } from "react-redux";
 import { uiSlice } from "../layout/uiSlice";
 import { errorApi } from "../api/errorApi";
-import { bookticketApi } from "../../feartures/bookticket/bookticketApi";
-import { accountApi } from "../../feartures/account/accountApi";
-import { adminApi } from "../../feartures/admin/adminApi";
+import { bookticketApi } from "../../features/bookticket/bookticketApi";
+import { accountApi } from "../../features/account/accountApi";
+import { adminApi } from "../../features/admin/adminApi";
 
 export const store = configureStore({
     reducer: {
