@@ -11,12 +11,12 @@ const {id} = useParams();
 const {data , isLoading} = useFetchShowTimesQuery();
 
 if (!data || isLoading) return <div>Loading...</div>
-console.log(data)
+
   return (
     <Grid>
       <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3}}>
         {data.map(st => (
-          <Grid>
+          <Grid key={st.id}>
             <Card sx={{
     maxWidth: 345,
     borderRadius: 4,

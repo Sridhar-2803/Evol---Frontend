@@ -25,21 +25,10 @@ export default function MovieCard({movies}: Props) {
       </Box>
       
       <CardContent>
-        <Typography
-           gutterBottom
-          
-           variant="subtitle2">
-            
-        </Typography> 
+        <Typography gutterBottom variant="subtitle2" textAlign="center">
+          {movies.title}
+        </Typography>
       </CardContent>
-      <CardActions
-          sx={{justifyContent: 'space-between'}}
-      >
-        
-      </CardActions>
-      <Typography justifyContent='center'>
-        {movies.title}      
-      </Typography>
         
     </Card>
     

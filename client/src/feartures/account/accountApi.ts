@@ -22,8 +22,8 @@ export const accountApi = createApi({
                 try {
                     await queryFulfilled;
                     dispatch(accountApi.util.invalidateTags(['UserInfo']))
-                } catch (error) {
-                    console.log(error);
+                } catch {
+                    // error handled by baseQueryWithErrorHandling
                 }
             }
         }),
@@ -41,7 +41,6 @@ export const accountApi = createApi({
                     toast.success('Registration successful')
                     router.navigate('/');
                 } catch (error) {
-                    console.log(error);
                     throw error;
                 }
             }

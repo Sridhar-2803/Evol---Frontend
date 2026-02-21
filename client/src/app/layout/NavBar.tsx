@@ -8,12 +8,6 @@ import { useUserInfoQuery } from "../../feartures/account/accountApi";
 
 
 
-// const rightLinks = [
-//   {title: 'login', path: '/login'},
-//   {title: 'register', path: '/register'}
-// ]
-
-
 
 export default function NavBar() {
   const {data: user} = useUserInfoQuery();

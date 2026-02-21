@@ -15,7 +15,7 @@ export default function TheatreList({theatre}: Props) {
   return (
     <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3}}>
       {theatre.map(theatres => (
-        <TheatreCard theatres={theatres} />
+        <TheatreCard key={theatres.id} theatres={theatres} />
       ))}
     </Box>
   )

@@ -13,9 +13,8 @@ export const uiSlice = createSlice({
             
     },
     reducers: {
-        startLoading: (state,action ) => {
+        startLoading: (state) => {
             state.isLoading = true;
-            state=state+action.payload;
         },
         stopLoading: (state) => {
             state.isLoading = false;

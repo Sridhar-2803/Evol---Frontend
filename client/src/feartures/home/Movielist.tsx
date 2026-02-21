@@ -10,7 +10,7 @@ export default function Movielist({movie}: Props) {
   return (
     <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center'}}>
         {movie.map(movies => (
-           <MovieCard movies={movies} />
+           <MovieCard key={movies.id} movies={movies} />
         ))}
     </Box>
   )

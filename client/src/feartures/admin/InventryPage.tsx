@@ -22,8 +22,8 @@ export default function InventryPage() {
         try {
             await deleteMovie(id);
             refetch();
-        } catch (error) {
-           console.log(error); 
+        } catch {
+           // error handled by baseQueryWithErrorHandling
         }
     }
 
