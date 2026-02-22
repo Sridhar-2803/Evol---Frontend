@@ -31,7 +31,7 @@ export default function MovieForm({setEditMode, movie, refetch, setSelectedMovie
       if(movie) reset(movie);
 
       return () => {
-        if (watchFile) URL.revokeObjectURL(watchFile.preview)
+        if (watchFile) URL.revokeObjectURL((watchFile as File & {preview: string}).preview)
       }
     }, [movie, reset, watchFile]);
 
@@ -104,9 +104,9 @@ export default function MovieForm({setEditMode, movie, refetch, setSelectedMovie
                 </Grid>
                 
           <Grid  size={12} style={{ textAlign: "center" }}>
-            {watchFile?.preview ? (
+            {(watchFile as File & {preview: string})?.preview ? (
             <img
-              src={URL.createObjectURL(watchFile)}
+              src={URL.createObjectURL(watchFile!)}
               alt="preview"
               style={{ maxHeight: 200 }}
             />
