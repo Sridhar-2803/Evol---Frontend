@@ -65,7 +65,7 @@ export default function LoginForm() {
               />
               
               <Button disabled={isLoading} variant="contained" type="submit">
-                  Sign in
+                  Sign
               </Button>
               <Typography sx={{textAlign: 'center'}}>
                   Don't have an account?
